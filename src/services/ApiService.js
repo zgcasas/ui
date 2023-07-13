@@ -3,6 +3,7 @@ import { apiRequest } from './AuthorizationService';
 import { catchError } from "rxjs/operators";
 import { from, of, throwError } from "rxjs";
 import session from "../util/session";
+import QueryString from 'querystring';
 
 export const ApiResource = function () {
 
@@ -129,6 +130,9 @@ const API = {
   onConnectionRefused: callback => ConnectionRefusedCallbacks.push(callback),
 
   setupOAuth2Credentials: () => {
+    const params = QueryString.parse(window.location.search.slice(1, window.location.search.length));
+    if (params.cenitHost) session.cenitBackendBaseUrl = params.cenitHost;
+
     const url = `${session.cenitBackendBaseUrl}/app/admin/oauth2/client/credentials`;
     const reverse = (str) => str.split('').reverse().join('');
 
